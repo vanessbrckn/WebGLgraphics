@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<!-- Vanessa Bracken CSE470 HW2 -->
+<style type="text/css">
+	canvas {background: white;}
+</style>
+
+<!-- we will build this for HW2 -->
+<!-- NO math in the vertex shader! -->
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute  vec4 vPosition;
+attribute  vec4 vColor;
+varying vec4 fColor;
+
+
+uniform mat4 modelView;
+ 
+
+void main() 
+{
+    gl_PointSize = 10.0;
+	gl_Position = modelView*vPosition;
+    fColor = vColor;
+} 
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+varying vec4 fColor;
+
+void
+main()
+{
+    gl_FragColor = fColor;
+}
+</script>
+
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="pickAcube.js"></script>
+<script type="text/javascript" src="CreateCube.js"></script>
+
+<body>
+<h3>HW 2: Vanessa Bracken</h3>
+<canvas id="gl-canvas" width="600" height="600" style="border:2px solid #000000;">
+	Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+<div>
+	<p>Click an outer which will be the cube that the middle one mimics.</p>
+	<table style "width:50%">
+	<tr>
+		<td><p>Click the button to make center cube back to it's original size and position</p>
+		<button id = "buttonRESET">Reset Center Cube</button></td>
+	</tr>
+	<tr><td>
+		scale 10% <input id="slider" type="range" min=".1" max="1" step=".1" value=".2"/>
+		100%<br></td>
+	</tr>
+	<tr><td>
+		rotation speed 0 <input id="spSlider" type="range" min="0" max="2" step="0.1" value = ".2"/>
+		2<br></td>
+	</tr>
+	<tr><td>
+	<h1>CSE 470 HW #2: Pick a Cube</h1>
+	<p> Author: Vanessa Bracken        date: 03/02/2021</br>
+	Description: This program takes a prototype cube, centers it on the canvas, and then duplicates</br>
+	the cube around the center cube using a for loop and multiple redraws. The user may click an outer</br>
+	cube to replace the middle one, speed up the rotations, and make the cubes larger</br></p>
+	<p>Resources: Prof. Angel's codes, and Diane Hansford's lecture slides</p>
+	</td></tr>
+	</table>
+
+	
+
+</div>
+</body>
+</html>
