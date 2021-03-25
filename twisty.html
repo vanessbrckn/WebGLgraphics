@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<title>T W I S T Y !</title>
+
+
+<!-- Vertex Shader -->
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+// This is GLSL code (not HTML5)
+
+attribute vec4 vPosition;
+
+//HW470: one or more uniforms to control twisting and color change
+//uniform 
+uniform float theta;
+
+
+//incoming color attribute and varying for fragment shader
+attribute vec3 vColor;
+varying vec4 color;
+
+
+void
+main()
+{
+	// HW470: twisty the geometry x,y coords and set z and w
+	// Change the code below.
+
+	float d = sqrt(vPosition.y * vPosition.y  + vPosition.x * vPosition.x);
+    float s = sin( theta*d); //this is how I did the deformation effect 
+    float c = cos( theta*d);
+	
+    
+   gl_PointSize = 10.0;
+
+ 
+	gl_Position.x =  ((c ) * vPosition.x - s * vPosition.y );
+    gl_Position.y =  ((s )  * vPosition.x + c * vPosition.y );
+	
+	gl_Position.z = 0.0;
+    gl_Position.w = 1.0;
+	
+	// common mistake: using integer instead of float
+	// gl_Position.w = 1; 
+	//     -- this would result in an error
+	// common mistake: trying to change a uniform variable here
+	
+	
+	//HW470: Modify color   
+	// colors are between 0 and 1. 
+	// You will need to do linear interpolation
+	// for example interpolate between current red component and 1.0 
+	float red = vColor.r + theta;
+	
+	float green = vColor.g + theta;
+	
+	float blue = vColor.b + theta;
+
+    //set the varying color for the fragment shader 
+    color = vec4(red, green, blue, 1.0);
+}
+</script>
+
+<!-- Fragment Shader -->
+<!-- (no change to this) -->
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+// This is GLSL code (not HTML5)
+
+precision mediump float;
+
+// Color coming in
+varying vec4 color;
+
+
+void
+main()
+{
+   //pass color to fragment shader
+    gl_FragColor = color;
+}
+</script>
+
+<!-- JS Utility codes and codes for this program -->
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="twisty.js"></script>
+</head>   
+
+<body>
+<!--HW470: Takes an object of triangles and rotates them, fading to white, -->
+<!--deforming the shapes in relation to their distance from the orgin. -->
+<div style="font-family:verdana";>
+<h1> CSE 470 HW#1: TWISTY!</h1>
+
+<strong>Author: </strong>Vanessa Bracken
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp        
+<strong>Date: </strong>Feb 2020</br>
+
+</br>
+<strong>Description: </strong></br>This program .... Takes several triangles and rotate's them about
+</br>
+the origin and also deforms the shape in relation to the origin as it fades from color to white. 
+</br>
+<strong>How did you map color from the initial (r,g,b) to white?</strong></br>
+HW470: I used a variable (theta) that begins at 0.0 (to make no change) and increments to 1.
+</br>
+</br>
+<strong>Resources: </strong>Prof. Angel's codes. (HW470: Slides from lecture, and text book)</br>
+</br>
+</div>
+
+<canvas id="gl-canvas" width="512" height="512" style="border:2px solid #000000;">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+</body>
+</html>
